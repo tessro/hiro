@@ -6,6 +6,6 @@ RUN npm install -g obsidian-headless \
 COPY docker/obsidian-sync/entrypoint.sh /usr/local/bin/obsidian-sync-entrypoint.sh
 RUN chmod 0755 /usr/local/bin/obsidian-sync-entrypoint.sh
 
-WORKDIR /srv/vaults
+WORKDIR /srv/obsidian/vault
 
 ENTRYPOINT ["/usr/local/bin/obsidian-sync-entrypoint.sh"]

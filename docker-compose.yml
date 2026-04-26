@@ -114,14 +114,14 @@ services:
       dockerfile: docker/obsidian-sync/Dockerfile
     restart: unless-stopped
     user: node
-    working_dir: /srv/vaults
+    working_dir: /srv/obsidian/vault
     environment:
       HOME: /home/node
-      OBSIDIAN_VAULT_PATH: ${OBSIDIAN_VAULT_PATH:-/srv/vaults}
+      OBSIDIAN_VAULT_PATH: ${OBSIDIAN_VAULT_PATH:-/srv/obsidian/vault}
     volumes:
       - type: bind
         source: ${HOME}/vaults
-        target: /srv/vaults
+        target: /srv/obsidian/vault
       - type: bind
         source: ${HOME}/.config/obsidian-headless
         target: /home/node/.config/obsidian-headless
