@@ -117,6 +117,7 @@ services:
     working_dir: /srv/vaults
     environment:
       HOME: /home/node
+      OBSIDIAN_VAULT_PATH: ${OBSIDIAN_VAULT_PATH:-/srv/vaults}
     volumes:
       - type: bind
         source: ${HOME}/vaults
