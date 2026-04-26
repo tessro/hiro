@@ -117,7 +117,6 @@ services:
     working_dir: /srv/obsidian/vault
     environment:
       HOME: /home/node
-      OBSIDIAN_SYNC_DIR: /srv/obsidian/vault
     volumes:
       - type: bind
         source: ${OBSIDIAN_VAULT_DIR:?set OBSIDIAN_VAULT_DIR}
@@ -125,4 +124,3 @@ services:
       - type: bind
         source: ${HOME}/.config/obsidian-headless
         target: /home/node/.config/obsidian-headless
-        read_only: true
