@@ -13,6 +13,7 @@ RUN apt-get update \
     > /etc/apt/sources.list.d/github-cli.list \
   && apt-get update \
   && apt-get install -y --no-install-recommends gh \
+  && npm install -g @googleworkspace/cli \
   && rm -rf /var/lib/apt/lists/*
 
 COPY docker/hermes/entrypoint.sh /usr/local/bin/hermes-entrypoint.sh

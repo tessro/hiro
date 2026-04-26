@@ -20,6 +20,24 @@ x-hermes-volumes: &hermes-volumes
     bind:
       create_host_path: false
 
+x-hermes-gateway-volumes: &hermes-gateway-volumes
+  - type: bind
+    source: ${HOME}/.hermes
+    target: /opt/data
+    bind:
+      create_host_path: false
+  - type: bind
+    source: ./certs/proxy-ca.pem
+    target: /srv/cacert.pem
+    read_only: true
+    bind:
+      create_host_path: false
+  - type: bind
+    source: ${HOME}/.config/gws
+    target: /config/gws
+    bind:
+      create_host_path: false
+
 services:
   proxy:
     build:
@@ -63,11 +81,13 @@ services:
       HTTP_PROXY: http://proxy:8080
       HTTPS_PROXY: http://proxy:8080
       NO_PROXY: localhost,127.0.0.1
+      GOOGLE_WORKSPACE_CLI_KEYRING_BACKEND: file
+      GOOGLE_WORKSPACE_CLI_CONFIG_DIR: /config/gws
       OPENROUTER_API_KEY: dummy-openrouter-key
       <<: *hermes-environment
     ports:
       - "8642:8642"
-    volumes: *hermes-volumes
+    volumes: *hermes-gateway-volumes
     depends_on:
       - proxy
 
@@ -87,3 +107,21 @@ services:
     volumes: *hermes-volumes
     depends_on:
       - hermes-gateway
+
+  obsidian-sync:
+    build:
+      context: .
+      dockerfile: docker/obsidian-sync/Dockerfile
+    restart: unless-stopped
+    user: node
+    working_dir: /srv/vaults
+    environment:
+      HOME: /home/node
+    volumes:
+      - type: bind
+        source: ${HOME}/vaults
+        target: /srv/vaults
+      - type: bind
+        source: ${HOME}/.config/obsidian-headless
+        target: /home/node/.config/obsidian-headless
+        read_only: true
