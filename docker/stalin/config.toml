@@ -12,9 +12,6 @@ env = "OPENROUTER_API_KEY"
 [secrets.github_token]
 env = "GH_TOKEN"
 
-[secrets.google_workspace_cli_token]
-env = "GOOGLE_WORKSPACE_CLI_TOKEN"
-
 [[rules]]
 name = "block-instance-metadata"
 audit = true
@@ -44,10 +41,17 @@ name = "google-workspace-auth"
 audit = true
 
 [rules.match]
+scheme = "https"
 host = "*.googleapis.com"
 
-[rules.request_headers.set]
-authorization = { secret = "google_workspace_cli_token", format = "Bearer {value}" }
+[rules.request_headers.set.authorization]
+format = "Bearer {value}"
+
+[rules.request_headers.set.authorization.oauth_refresh_token]
+token_url = "https://oauth2.googleapis.com/token"
+client_id_env = "GOOGLE_WORKSPACE_CLIENT_ID"
+client_secret_env = "GOOGLE_WORKSPACE_CLIENT_SECRET"
+refresh_token_env = "GOOGLE_WORKSPACE_REFRESH_TOKEN"
 
 [[rules]]
 name = "github-api-auth"
