@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+data_dir="${HERMES_DATA_DIR:-${HOME}/.hermes}"
+image="${HERMES_IMAGE:-nousresearch/hermes-agent:latest}"
+
+mkdir -p "$data_dir"
+
+exec docker run -it --rm \
+  --volume "${data_dir}:/opt/data" \
+  "$image" \
+  setup "$@"

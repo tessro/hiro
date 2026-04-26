@@ -1,0 +1,50 @@
+listen = "0.0.0.0:8080"
+audit_log = "/tmp/stalin-audit.jsonl"
+
+[mitm]
+enabled = true
+ca_cert = "/srv/cacert.pem"
+ca_key = "/srv/cakey.pem"
+
+[secrets.openrouter_api_key]
+env = "OPENROUTER_API_KEY"
+
+[secrets.github_token]
+env = "GH_TOKEN"
+
+[[rules]]
+name = "block-instance-metadata"
+audit = true
+
+[rules.match]
+host = "169.254.169.254"
+
+[rules.deny]
+status = 403
+body = "metadata service access is blocked\n"
+
+[[rules]]
+name = "openrouter-auth"
+audit = true
+
+[rules.match]
+host = "openrouter.ai"
+
+[rules.request_headers.set]
+authorization = { secret = "openrouter_api_key", format = "Bearer {value}" }
+
+[rules.request_headers]
+remove = ["x-placeholder-authorization"]
+
+[[rules]]
+name = "github-api-auth"
+audit = true
+
+[rules.match]
+host = "api.github.com"
+
+[rules.request_headers.set]
+authorization = { secret = "github_token", format = "Bearer {value}" }
+
+[rules.request_headers]
+remove = ["x-placeholder-authorization"]

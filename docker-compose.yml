@@ -1,0 +1,91 @@
+x-hermes-build: &hermes-build
+  context: .
+  dockerfile: docker/hermes/Dockerfile
+
+x-hermes-environment: &hermes-environment
+  NODE_EXTRA_CA_CERTS: /srv/cacert.pem
+  SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
+  REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
+
+x-hermes-volumes: &hermes-volumes
+  - type: bind
+    source: ${HOME}/.hermes
+    target: /opt/data
+    bind:
+      create_host_path: false
+  - type: bind
+    source: ./certs/stalin-ca.pem
+    target: /srv/cacert.pem
+    read_only: true
+    bind:
+      create_host_path: false
+
+services:
+  proxy:
+    build:
+      context: ../stalin
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    environment:
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:?set OPENROUTER_API_KEY}
+      GH_TOKEN: ${GH_TOKEN:?set GH_TOKEN}
+    ports:
+      - "8080:8080"
+    volumes:
+      - type: bind
+        source: ./docker/stalin/config.toml
+        target: /etc/stalin/config.toml
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./certs/stalin-ca.pem
+        target: /srv/cacert.pem
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./certs/stalin-ca-key.pem
+        target: /srv/cakey.pem
+        read_only: true
+        bind:
+          create_host_path: false
+
+  hermes-gateway:
+    build: *hermes-build
+    restart: unless-stopped
+    shm_size: 1g
+    command:
+      - gateway
+      - run
+    environment:
+      HTTP_PROXY: http://proxy:8080
+      HTTPS_PROXY: http://proxy:8080
+      NO_PROXY: localhost,127.0.0.1
+      OPENROUTER_API_KEY: dummy-openrouter-key
+      GH_TOKEN: dummy-gh-token
+      GITHUB_TOKEN: dummy-gh-token
+      <<: *hermes-environment
+    ports:
+      - "8642:8642"
+    volumes: *hermes-volumes
+    depends_on:
+      - proxy
+
+  hermes-dashboard:
+    build: *hermes-build
+    restart: unless-stopped
+    command:
+      - dashboard
+      - --host
+      - 0.0.0.0
+      - --insecure
+    environment:
+      GATEWAY_HEALTH_URL: http://hermes-gateway:8642
+      <<: *hermes-environment
+    ports:
+      - "127.0.0.1:9119:9119"
+    volumes: *hermes-volumes
+    depends_on:
+      - hermes-gateway
