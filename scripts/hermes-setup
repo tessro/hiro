@@ -3,10 +3,14 @@ set -euo pipefail
 
 data_dir="${HERMES_DATA_DIR:-${HOME}/.hermes}"
 image="${HERMES_IMAGE:-nousresearch/hermes-agent:latest}"
+hermes_uid="${HERMES_UID:-$(id -u)}"
+hermes_gid="${HERMES_GID:-$(id -g)}"
 
 mkdir -p "$data_dir"
 
 exec docker run -it --rm \
+  --env "HERMES_UID=${hermes_uid}" \
+  --env "HERMES_GID=${hermes_gid}" \
   --volume "${data_dir}:/opt/data" \
   "$image" \
   setup "$@"
