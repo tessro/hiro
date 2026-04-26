@@ -64,6 +64,7 @@ services:
       HTTP_PROXY: http://proxy:8080
       HTTPS_PROXY: http://proxy:8080
       NO_PROXY: localhost,127.0.0.1
+      GH_TOKEN: dummy-github-token
       GOOGLE_WORKSPACE_CLI_TOKEN: dummy-google-workspace-token
       OPENROUTER_API_KEY: dummy-openrouter-key
       <<: *hermes-environment
