@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+repo_dir="$(cd -- "${script_dir}/.." && pwd)"
+certs_dir="${PROXY_CERTS_DIR:-${repo_dir}/certs}"
+days="${PROXY_CA_DAYS:-365}"
+subject="${PROXY_CA_SUBJECT:-/CN=local proxy CA}"
+
+mkdir -p "$certs_dir"
+
+openssl genrsa -out "${certs_dir}/proxy-ca-key.pem" 4096
+chmod 0600 "${certs_dir}/proxy-ca-key.pem"
+
+openssl req -x509 -new -nodes \
+  -key "${certs_dir}/proxy-ca-key.pem" \
+  -sha256 \
+  -days "$days" \
+  -subj "$subject" \
+  -addext "basicConstraints=critical,CA:TRUE" \
+  -addext "keyUsage=critical,keyCertSign,cRLSign" \
+  -addext "subjectKeyIdentifier=hash" \
+  -out "${certs_dir}/proxy-ca.pem"

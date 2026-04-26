@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+repo_dir="$(cd -- "${script_dir}/.." && pwd)"
+
+cd "$repo_dir"
+
+exec docker compose run --rm --no-deps \
+  --entrypoint /usr/bin/tini \
+  hermes-gateway \
+  -g \
+  -- \
+  /usr/local/bin/hermes-entrypoint.sh \
+  "$@"

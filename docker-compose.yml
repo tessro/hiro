@@ -14,7 +14,7 @@ x-hermes-volumes: &hermes-volumes
     bind:
       create_host_path: false
   - type: bind
-    source: ./certs/stalin-ca.pem
+    source: ./certs/proxy-ca.pem
     target: /srv/cacert.pem
     read_only: true
     bind:
@@ -40,13 +40,13 @@ services:
         bind:
           create_host_path: false
       - type: bind
-        source: ./certs/stalin-ca.pem
+        source: ./certs/proxy-ca.pem
         target: /srv/cacert.pem
         read_only: true
         bind:
           create_host_path: false
       - type: bind
-        source: ./certs/stalin-ca-key.pem
+        source: ./certs/proxy-ca-key.pem
         target: /srv/cakey.pem
         read_only: true
         bind:

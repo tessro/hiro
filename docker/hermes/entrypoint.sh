@@ -2,7 +2,7 @@
 set -euo pipefail
 
 cert_source=/srv/cacert.pem
-cert_target=/usr/local/share/ca-certificates/stalin-ca.crt
+cert_target=/usr/local/share/ca-certificates/proxy-ca.crt
 
 if [ "$(id -u)" = "0" ] && [ -f "$cert_source" ]; then
   install -m 0644 "$cert_source" "$cert_target"
