@@ -30,6 +30,7 @@ services:
     environment:
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:?set OPENROUTER_API_KEY}
       GH_TOKEN: ${GH_TOKEN:?set GH_TOKEN}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:?set TELEGRAM_BOT_TOKEN}
       GOOGLE_WORKSPACE_CLIENT_ID: ${GOOGLE_WORKSPACE_CLIENT_ID:?set GOOGLE_WORKSPACE_CLIENT_ID}
       GOOGLE_WORKSPACE_CLIENT_SECRET: ${GOOGLE_WORKSPACE_CLIENT_SECRET:?set GOOGLE_WORKSPACE_CLIENT_SECRET}
       GOOGLE_WORKSPACE_REFRESH_TOKEN: ${GOOGLE_WORKSPACE_REFRESH_TOKEN:?set GOOGLE_WORKSPACE_REFRESH_TOKEN}
@@ -39,6 +40,12 @@ services:
       - type: bind
         source: ./docker/stalin/config.toml
         target: /etc/stalin/config.toml
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./docker/stalin/telegram-auth.plugin.ts
+        target: /etc/stalin/telegram-auth.plugin.ts
         read_only: true
         bind:
           create_host_path: false
@@ -67,6 +74,7 @@ services:
       HTTPS_PROXY: http://proxy:8080
       NO_PROXY: localhost,127.0.0.1
       GH_TOKEN: dummy-github-token
+      TELEGRAM_BOT_TOKEN: dummy-telegram-token
       GOOGLE_WORKSPACE_CLI_TOKEN: dummy-google-workspace-token
       OPENROUTER_API_KEY: dummy-openrouter-key
       <<: *hermes-environment

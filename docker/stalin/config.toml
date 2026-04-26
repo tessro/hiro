@@ -12,6 +12,14 @@ env = "OPENROUTER_API_KEY"
 [secrets.github_token]
 env = "GH_TOKEN"
 
+[secrets.telegram_bot_token]
+env = "TELEGRAM_BOT_TOKEN"
+
+[[plugins]]
+name = "telegram-auth"
+version = "0.1.0"
+path = "telegram-auth.plugin.ts"
+
 [[rules]]
 name = "block-instance-metadata"
 audit = true
