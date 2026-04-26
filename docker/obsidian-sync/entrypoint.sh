@@ -5,6 +5,6 @@ if [ "$#" -gt 0 ]; then
   exec "$@"
 fi
 
-vault_path="${OBSIDIAN_VAULT_PATH:-/srv/obsidian/vault}"
+vault_path="${OBSIDIAN_SYNC_DIR:-/srv/obsidian/vault}"
 
 exec ob sync --path "$vault_path" --continuous

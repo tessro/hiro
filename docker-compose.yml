@@ -117,10 +117,10 @@ services:
     working_dir: /srv/obsidian/vault
     environment:
       HOME: /home/node
-      OBSIDIAN_VAULT_PATH: ${OBSIDIAN_VAULT_PATH:-/srv/obsidian/vault}
+      OBSIDIAN_SYNC_DIR: /srv/obsidian/vault
     volumes:
       - type: bind
-        source: ${HOME}/vaults
+        source: ${OBSIDIAN_VAULT_DIR:?set OBSIDIAN_VAULT_DIR}
         target: /srv/obsidian/vault
       - type: bind
         source: ${HOME}/.config/obsidian-headless
