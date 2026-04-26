@@ -20,24 +20,6 @@ x-hermes-volumes: &hermes-volumes
     bind:
       create_host_path: false
 
-x-hermes-gateway-volumes: &hermes-gateway-volumes
-  - type: bind
-    source: ${HOME}/.hermes
-    target: /opt/data
-    bind:
-      create_host_path: false
-  - type: bind
-    source: ./certs/proxy-ca.pem
-    target: /srv/cacert.pem
-    read_only: true
-    bind:
-      create_host_path: false
-  - type: bind
-    source: ${HOME}/.config/gws
-    target: /config/gws
-    bind:
-      create_host_path: false
-
 services:
   proxy:
     build:
@@ -48,6 +30,7 @@ services:
     environment:
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:?set OPENROUTER_API_KEY}
       GH_TOKEN: ${GH_TOKEN:?set GH_TOKEN}
+      GOOGLE_WORKSPACE_CLI_TOKEN: ${GOOGLE_WORKSPACE_CLI_TOKEN:?set GOOGLE_WORKSPACE_CLI_TOKEN}
     ports:
       - "8080:8080"
     volumes:
@@ -81,13 +64,12 @@ services:
       HTTP_PROXY: http://proxy:8080
       HTTPS_PROXY: http://proxy:8080
       NO_PROXY: localhost,127.0.0.1
-      GOOGLE_WORKSPACE_CLI_KEYRING_BACKEND: file
-      GOOGLE_WORKSPACE_CLI_CONFIG_DIR: /config/gws
+      GOOGLE_WORKSPACE_CLI_TOKEN: dummy-google-workspace-token
       OPENROUTER_API_KEY: dummy-openrouter-key
       <<: *hermes-environment
     ports:
       - "8642:8642"
-    volumes: *hermes-gateway-volumes
+    volumes: *hermes-volumes
     depends_on:
       - proxy
 
