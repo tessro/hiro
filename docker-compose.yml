@@ -6,8 +6,8 @@ x-hermes-environment: &hermes-environment
   NODE_EXTRA_CA_CERTS: /srv/cacert.pem
   SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
   REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
-  HERMES_UID: ${HERMES_UID:?set HERMES_UID}
-  HERMES_GID: ${HERMES_GID:?set HERMES_GID}
+  HERMES_UID: ${HERMES_UID:-1000}
+  HERMES_GID: ${HERMES_GID:-1000}
 
 x-hermes-volumes: &hermes-volumes
   - type: bind

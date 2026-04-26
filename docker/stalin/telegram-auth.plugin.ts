@@ -13,8 +13,9 @@ const plugin: ProxyPlugin = {
 
     const realToken = await proxy.secrets.get("telegram_bot_token");
     const rewrittenPath = `/bot${await realToken.text()}/${req.url.path.slice(dummyPrefix.length)}`;
-    const upstream = new URL(req.url.full);
-    upstream.pathname = rewrittenPath;
+    const port = req.url.port === undefined ? "" : `:${req.url.port}`;
+    const query = req.url.query === undefined ? "" : `?${req.url.query}`;
+    const upstream = `${req.url.scheme}://${req.url.host}${port}${rewrittenPath}${query}`;
 
     await proxy.audit.write({
       type: "auth.swap",
@@ -27,7 +28,7 @@ const plugin: ProxyPlugin = {
 
     return {
       action: "route",
-      upstream: upstream.toString(),
+      upstream,
     };
   },
 };
