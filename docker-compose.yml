@@ -64,8 +64,6 @@ services:
       HTTPS_PROXY: http://proxy:8080
       NO_PROXY: localhost,127.0.0.1
       OPENROUTER_API_KEY: dummy-openrouter-key
-      GH_TOKEN: dummy-gh-token
-      GITHUB_TOKEN: dummy-gh-token
       <<: *hermes-environment
     ports:
       - "8642:8642"
