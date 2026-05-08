@@ -12,6 +12,9 @@ env = "OPENROUTER_API_KEY"
 [secrets.github_token]
 env = "GH_TOKEN"
 
+[secrets.lunchmoney_api_key]
+env = "LUNCHMONEY_API_KEY"
+
 [secrets.telegram_bot_token]
 env = "TELEGRAM_BOT_TOKEN"
 
@@ -70,6 +73,19 @@ host = "api.github.com"
 
 [rules.request_headers.set]
 authorization = { secret = "github_token", format = "Bearer {value}" }
+
+[rules.request_headers]
+remove = ["x-placeholder-authorization"]
+
+[[rules]]
+name = "lunchmoney-api-auth"
+audit = true
+
+[rules.match]
+host = "api.lunchmoney.dev"
+
+[rules.request_headers.set]
+authorization = { secret = "lunchmoney_api_key", format = "Bearer {value}" }
 
 [rules.request_headers]
 remove = ["x-placeholder-authorization"]

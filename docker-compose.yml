@@ -32,6 +32,7 @@ services:
     environment:
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:?set OPENROUTER_API_KEY}
       GH_TOKEN: ${GH_TOKEN:?set GH_TOKEN}
+      LUNCHMONEY_API_KEY: ${LUNCHMONEY_API_KEY:?set LUNCHMONEY_API_KEY}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:?set TELEGRAM_BOT_TOKEN}
       GOOGLE_WORKSPACE_CLIENT_ID: ${GOOGLE_WORKSPACE_CLIENT_ID:?set GOOGLE_WORKSPACE_CLIENT_ID}
       GOOGLE_WORKSPACE_CLIENT_SECRET: ${GOOGLE_WORKSPACE_CLIENT_SECRET:?set GOOGLE_WORKSPACE_CLIENT_SECRET}
@@ -77,6 +78,7 @@ services:
       NO_PROXY: localhost,127.0.0.1
       GH_TOKEN: dummy-github-token
       TELEGRAM_BOT_TOKEN: dummy-telegram-token
+      LUNCHMONEY_API_KEY: dummy-lunchmoney-key
       GOOGLE_WORKSPACE_CLI_TOKEN: dummy-google-workspace-token
       OPENROUTER_API_KEY: dummy-openrouter-key
       <<: *hermes-environment
