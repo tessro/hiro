@@ -15,6 +15,9 @@ env = "GH_TOKEN"
 [secrets.lunchmoney_api_key]
 env = "LUNCHMONEY_API_KEY"
 
+[secrets.nous_portal_api_key]
+env = "NOUS_PORTAL_API_KEY"
+
 [secrets.telegram_bot_token]
 env = "TELEGRAM_BOT_TOKEN"
 
@@ -86,6 +89,19 @@ host = "api.lunchmoney.dev"
 
 [rules.request_headers.set]
 authorization = { secret = "lunchmoney_api_key", format = "Bearer {value}" }
+
+[rules.request_headers]
+remove = ["x-placeholder-authorization"]
+
+[[rules]]
+name = "nous-portal-auth"
+audit = true
+
+[rules.match]
+host = "portal.nousresearch.com"
+
+[rules.request_headers.set]
+authorization = { secret = "nous_portal_api_key", format = "Bearer {value}" }
 
 [rules.request_headers]
 remove = ["x-placeholder-authorization"]
