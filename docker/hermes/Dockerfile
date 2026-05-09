@@ -1,4 +1,4 @@
-FROM nousresearch/hermes-agent:0.13
+FROM nousresearch/hermes-agent:v2026.5.7
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
