@@ -2,7 +2,7 @@
 set -euo pipefail
 
 data_dir="${HERMES_DATA_DIR:-${HOME}/.hermes}"
-image="${HERMES_IMAGE:-nousresearch/hermes-agent:latest}"
+image="${HERMES_IMAGE:-nousresearch/hermes-agent:0.13}"
 hermes_uid="${HERMES_UID:-$(id -u)}"
 hermes_gid="${HERMES_GID:-$(id -g)}"
 
